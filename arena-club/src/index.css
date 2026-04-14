@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #111827;
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* ─── Hero: entrada via CSS puro — seguro mesmo se GSAP falhar ─── */
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-1 { animation: heroFadeUp 0.75s ease 0.00s both; }
+.hero-2 { animation: heroFadeUp 0.75s ease 0.15s both; }
+.hero-3 { animation: heroFadeUp 0.75s ease 0.30s both; }
+.hero-4 { animation: heroFadeUp 0.75s ease 0.45s both; }
+.hero-5 { animation: heroFadeUp 0.75s ease 0.60s both; }
+
+/* ─── Scroll reveal — Intersection Observer adiciona .visible ─── */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.fade-in-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* delays para escalonar filhos */
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
+.delay-500 { transition-delay: 500ms; }
+.delay-600 { transition-delay: 600ms; }
+.delay-700 { transition-delay: 700ms; }
+
+/* ─── FAQ accordion ─── */
+.faq-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+.faq-body.open { max-height: 300px; }
+
+/* ─── Quiz: fade entre perguntas ─── */
+@keyframes quizStep {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.quiz-step { animation: quizStep 0.3s ease both; }
+
+/* ─── Tela de resultado do quiz ─── */
+@keyframes resultPop {
+  from { opacity: 0; transform: scale(0.88); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.result-pop { animation: resultPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+/* ─── Linha inferior dos cards de atividade ─── */
+.activity-line {
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 2px;
+  width: 0;
+  background: #84cc16;
+  border-radius: 0 0 12px 12px;
+  transition: width 0.35s ease;
+}
+.activity-card:hover .activity-line { width: 100%; }
+
+/* ─── Scroll horizontal sem scrollbar visível (mobile) ─── */
+.scroll-no-bar { scrollbar-width: none; -ms-overflow-style: none; }
+.scroll-no-bar::-webkit-scrollbar { display: none; }
