@@ -14,11 +14,35 @@ const activities = [
   { icon: HandHeart,      name: 'Massagem',     desc: 'Sessões sob consulta e disponibilidade (serviço avulso)' },
 ]
 
+// Calcula a inclinação 3D com base na posição do mouse dentro do card
+const handleTilt = (e) => {
+  const el   = e.currentTarget
+  const rect = el.getBoundingClientRect()
+  const x    = (e.clientX - rect.left)  / rect.width  - 0.5  // -0.5 → 0.5
+  const y    = (e.clientY - rect.top)   / rect.height - 0.5
+  el.style.transform  = `perspective(700px) rotateY(${x * 14}deg) rotateX(${-y * 14}deg) scale3d(1.04,1.04,1.04)`
+  el.style.transition = 'transform 0.08s ease'
+}
+
+const handleTiltReset = (e) => {
+  const el = e.currentTarget
+  el.style.transform  = 'perspective(700px) rotateY(0deg) rotateX(0deg) scale3d(1,1,1)'
+  el.style.transition = 'transform 0.45s ease'
+}
+
 function Activities() {
   const ref = useSectionReveal()
 
   return (
-    <section ref={ref} id="atividades" className="py-24 md:py-32 bg-[#f8fafc] relative overflow-hidden">
+    <section
+      ref={ref}
+      id="atividades"
+      className="py-24 md:py-32 bg-[#f8fafc] relative overflow-hidden"
+      style={{
+        backgroundImage:
+          'repeating-linear-gradient(-45deg, transparent, transparent 30px, rgba(26,58,42,0.022) 30px, rgba(26,58,42,0.022) 31px)',
+      }}
+    >
 
       {/* toque editorial: número gigante como decoração */}
       <span
@@ -31,13 +55,17 @@ function Activities() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         <div className="fade-in-section text-center mb-14">
-          <span className="inline-block font-body text-[11px] font-semibold text-[#84cc16] uppercase tracking-[5px] mb-4">
-            O que oferecemos
-          </span>
-          <h2 className="font-heading font-bold text-[#1a3a2a] text-3xl sm:text-4xl md:text-5xl">
-            Modalidades disponíveis
+          <div className="inline-flex items-center gap-3 mb-4">
+            <span aria-hidden="true" className="w-8 h-px bg-[#84cc16]" />
+            <span className="font-body text-[11px] font-semibold text-[#84cc16] uppercase tracking-[5px]">
+              O que oferecemos
+            </span>
+            <span aria-hidden="true" className="w-8 h-px bg-[#84cc16]" />
+          </div>
+          <h2 className="font-heading font-extrabold text-[#1a3a2a] text-3xl sm:text-5xl md:text-6xl tracking-tight">
+            Modalidades <span className="text-[#84cc16] italic">disponíveis</span>
           </h2>
-          <p className="mt-4 font-body text-gray-500 text-base sm:text-lg max-w-xl mx-auto">
+          <p className="mt-4 font-body text-gray-500 text-lg sm:text-xl max-w-xl mx-auto">
             Escolha a sua favorita ou experimente todas — no Arena Club há espaço para todo perfil.
           </p>
         </div>
@@ -52,13 +80,23 @@ function Activities() {
             return (
               <div
                 key={item.name}
+                onMouseMove={handleTilt}
+                onMouseLeave={handleTiltReset}
                 className="activity-card group relative flex-shrink-0 w-64 snap-start sm:w-auto
                            bg-white border border-gray-100 rounded-2xl p-6
                            flex flex-col gap-4 overflow-hidden
-                           hover:scale-[1.03] hover:shadow-xl hover:shadow-[#84cc16]/10 hover:border-[#84cc16]/25
-                           transition-all duration-300 cursor-default"
+                           hover:shadow-xl hover:shadow-[#84cc16]/10 hover:border-[#84cc16]/25
+                           cursor-default will-change-transform"
                 style={{ transitionDelay: `${i * 40}ms` }}
               >
+                {/* número sequencial como watermark editorial */}
+                <span
+                  aria-hidden="true"
+                  className="absolute top-2 right-3 font-heading font-extrabold text-[3.5rem] text-gray-900/[0.045] leading-none select-none pointer-events-none"
+                >
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+
                 <div className="p-3 bg-[#1a3a2a]/5 rounded-xl w-fit group-hover:bg-[#84cc16]/12 transition-colors duration-300">
                   <Icon size={30} className="text-[#84cc16]" strokeWidth={1.75} />
                 </div>

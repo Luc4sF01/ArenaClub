@@ -86,3 +86,105 @@ body {
 /* ─── Scroll horizontal sem scrollbar visível (mobile) ─── */
 .scroll-no-bar { scrollbar-width: none; -ms-overflow-style: none; }
 .scroll-no-bar::-webkit-scrollbar { display: none; }
+
+/* ─── Seleção de texto com identidade de marca ─── */
+::selection { background: #84cc16; color: #0f2218; }
+
+/* ─── Gradient text animado (hero title) ─── */
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% center; }
+  50%       { background-position: 100% center; }
+}
+.text-gradient {
+  background: linear-gradient(90deg, #84cc16 0%, #a3e635 35%, #65a30d 65%, #84cc16 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 4s ease infinite;
+}
+
+/* ─── Glow ambiente pulsante (hero) ─── */
+@keyframes ambientPulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%       { opacity: 1;    transform: scale(1.18); }
+}
+
+/* ─── Ripple no clique dos botões CTA ─── */
+@keyframes ripple {
+  from { opacity: 0.3; transform: scale(0); }
+  to   { opacity: 0;   transform: scale(2.8); }
+}
+.btn-ripple { position: relative; overflow: hidden; }
+.btn-ripple::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.4);
+  border-radius: inherit;
+  opacity: 0;
+  transform: scale(0);
+  pointer-events: none;
+}
+.btn-ripple:active::after { animation: ripple 0.5s ease forwards; }
+
+/* ─── Marquee band ─── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track { animation: marquee 32s linear infinite; }
+.marquee-wrap:hover .marquee-track { animation-play-state: paused; }
+
+/* ─── Custom cursor — esconde o padrão do SO em dispositivos com mouse ─── */
+@media (hover: hover) and (pointer: fine) {
+  * { cursor: none !important; }
+}
+
+/* ─── Respeita preferência de acessibilidade do sistema (WCAG 2.1 SC 2.3.3) ─── */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in-section           { transition: none; opacity: 1; transform: none; }
+  .hero-1, .hero-2, .hero-3,
+  .hero-4, .hero-5           { animation: none; opacity: 1; transform: none; }
+  .live-dot                  { animation: none; }
+  .scroll-line               { animation: none; opacity: 0.5; }
+  .text-gradient             { animation: none; }
+  .activity-card:hover::after { animation: none; }
+}
+
+/* ─── Live pulse: dot de "ao vivo" no badge do Hero ─── */
+@keyframes livePulse {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%       { opacity: 0.3; transform: scale(0.7); }
+}
+.live-dot { animation: livePulse 1.8s ease-in-out infinite; }
+
+/* ─── Scroll indicator: linha que viaja para baixo ─── */
+@keyframes scrollTravel {
+  0%   { transform: scaleY(0);   transform-origin: top;    opacity: 0; }
+  40%  { transform: scaleY(1);   transform-origin: top;    opacity: 1; }
+  70%  { transform: scaleY(1);   transform-origin: bottom; opacity: 1; }
+  100% { transform: scaleY(0);   transform-origin: bottom; opacity: 0; }
+}
+.scroll-line { animation: scrollTravel 2s ease-in-out infinite; }
+
+/* ─── Shimmer sweep nos cards de atividade ─── */
+@keyframes shimmerSweep {
+  from { background-position: -200% center; }
+  to   { background-position:  200% center; }
+}
+.activity-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  background: linear-gradient(105deg, transparent 40%, rgba(132,204,22,0.07) 50%, transparent 60%);
+  background-size: 200% 100%;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.activity-card:hover::after {
+  opacity: 1;
+  animation: shimmerSweep 0.65s ease forwards;
+}

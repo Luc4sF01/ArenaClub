@@ -11,13 +11,35 @@ const links = [
 ]
 
 function Header() {
-  const [solid, setSolid] = useState(false)
-  const [open,  setOpen]  = useState(false)
+  const [solid,    setSolid]    = useState(false)
+  const [open,     setOpen]     = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [active,   setActive]   = useState('inicio')
 
   useEffect(() => {
-    const handler = () => setSolid(window.scrollY > 60)
+    const handler = () => {
+      setSolid(window.scrollY > 60)
+      const el       = document.documentElement
+      const scrolled = window.scrollY / (el.scrollHeight - el.clientHeight)
+      setProgress(Math.min(scrolled * 100, 100))
+    }
     window.addEventListener('scroll', handler, { passive: true })
     return () => window.removeEventListener('scroll', handler)
+  }, [])
+
+  // IntersectionObserver detecta qual seção ocupa o centro da viewport
+  useEffect(() => {
+    const sections = document.querySelectorAll('section[id]')
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(entry.target.id)
+        })
+      },
+      { rootMargin: '-40% 0px -40% 0px', threshold: 0 }
+    )
+    sections.forEach((s) => observer.observe(s))
+    return () => observer.disconnect()
   }, [])
 
   return (
@@ -28,36 +50,50 @@ function Header() {
           : 'bg-[#1a3a2a]/55 backdrop-blur-lg'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 md:h-[72px]">
+      {/* barra de progresso de leitura */}
+      <div
+        className="absolute bottom-0 left-0 h-[2px] bg-[#84cc16] transition-[width] duration-75 ease-out rounded-full"
+        style={{ width: `${progress}%` }}
+        aria-hidden="true"
+      />
 
-        <a href="#inicio" className="flex items-center gap-2 group" aria-label="Arena Club">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-[68px] md:h-[78px]">
+
+        <a href="#inicio" className="flex items-center gap-2.5 group" aria-label="Arena Club">
           <Zap
-            size={22}
+            size={24}
             className="text-[#84cc16] group-hover:scale-110 transition-transform duration-300"
             strokeWidth={2.5}
           />
-          <span className="font-heading font-bold text-white text-[19px] tracking-wide">
+          <span className="font-heading font-bold text-white text-[22px] tracking-wide">
             Arena <span className="text-[#84cc16]">Club</span>
           </span>
         </a>
 
-        <nav className="hidden md:flex items-center gap-7" aria-label="Navegação principal">
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="font-body text-[13px] font-medium text-white/70 hover:text-[#84cc16] transition-colors duration-300"
-            >
-              {l.label}
-            </a>
-          ))}
+        <nav className="hidden md:flex items-center gap-8" aria-label="Navegação principal">
+          {links.map((l) => {
+            const isActive = active === l.href.slice(1)
+            return (
+              <a
+                key={l.href}
+                href={l.href}
+                className={`relative font-body text-[15px] font-medium transition-colors duration-300
+                            ${isActive ? 'text-[#84cc16]' : 'text-white/75 hover:text-[#84cc16]'}`}
+              >
+                {l.label}
+                {isActive && (
+                  <span className="absolute -bottom-1 left-0 right-0 h-px bg-[#84cc16] rounded-full" />
+                )}
+              </a>
+            )
+          })}
         </nav>
 
         <div className="flex items-center gap-3">
           <a
             href="#contato"
             className="hidden md:inline-flex items-center bg-[#84cc16] hover:bg-[#a3e635] active:scale-95
-                       text-[#0f2218] font-heading font-semibold text-[13px] px-5 py-2.5 rounded-lg
+                       text-[#0f2218] font-heading font-semibold text-[15px] px-6 py-2.5 rounded-lg
                        transition-all duration-300 hover:shadow-lg hover:shadow-[#84cc16]/25"
           >
             Quero conhecer

@@ -52,6 +52,18 @@ function Hero() {
         }}
       />
 
+      {/* glow ambiente — blob radial desfocado que pulsa lentamente */}
+      <div
+        aria-hidden="true"
+        className="absolute left-[15%] top-[25%] w-[580px] h-[380px] rounded-full pointer-events-none select-none"
+        style={{
+          background:
+            'radial-gradient(ellipse at center, rgba(132,204,22,0.13) 0%, transparent 72%)',
+          filter: 'blur(48px)',
+          animation: 'ambientPulse 7s ease-in-out infinite',
+        }}
+      />
+
       {/* textura de grid sutil */}
       <div
         className="absolute inset-0 opacity-[0.03]"
@@ -62,7 +74,7 @@ function Hero() {
         }}
       />
 
-      {/* toque editorial: texto gigante decorativo */}
+      {/* texto gigante decorativo */}
       <span
         aria-hidden="true"
         className="absolute right-[-3%] bottom-10 text-[22vw] font-extrabold text-white/[0.028] leading-none select-none pointer-events-none uppercase tracking-tighter"
@@ -74,7 +86,11 @@ function Hero() {
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 w-full pt-24 pb-40">
         <div className="max-w-2xl xl:max-w-3xl">
           {/* badge */}
-          <div className="hero-1 inline-flex items-center gap-2 border border-white/25 bg-white/8 text-white/90 text-sm font-body font-medium px-4 py-2 rounded-full mb-10 backdrop-blur-sm">
+          <div className="hero-1 inline-flex items-center gap-2.5 border border-white/25 bg-white/8 text-white/90 text-sm font-body font-medium px-4 py-2 rounded-full mb-10 backdrop-blur-sm">
+            <span
+              className="live-dot w-2 h-2 rounded-full bg-[#84cc16] flex-shrink-0"
+              aria-hidden="true"
+            />
             <Flame size={14} strokeWidth={2.5} className="text-[#84cc16]" />
             Inauguração em breve
           </div>
@@ -82,21 +98,24 @@ function Hero() {
           {/* título com linha vertical decorativa */}
           <div className="hero-2 flex items-start gap-5 mb-7">
             <div className="w-[3px] h-20 bg-[#84cc16] mt-1 flex-shrink-0 rounded-full" />
-            <h1 className="font-heading font-extrabold leading-[1.04] tracking-tight">
-              <span className="block text-white text-5xl sm:text-6xl md:text-7xl lg:text-[78px]">
+            <h1
+              className="font-heading font-extrabold leading-[1.04] tracking-tight"
+              style={{ textShadow: '0 4px 24px rgba(0,0,0,0.4)' }}
+            >
+              <span className="block text-white text-5xl sm:text-6xl md:text-7xl lg:text-[82px]">
                 O seu novo
               </span>
-              <span className="block text-[#84cc16] text-5xl sm:text-6xl md:text-7xl lg:text-[78px]">
+              <span className="block text-[#84cc16] text-5xl sm:text-6xl md:text-7xl lg:text-[82px]">
                 clube esportivo
               </span>
-              <span className="block text-white text-5xl sm:text-6xl md:text-7xl lg:text-[78px]">
+              <span className="block text-white text-5xl sm:text-6xl md:text-7xl lg:text-[82px]">
                 favorito
               </span>
             </h1>
           </div>
 
-          {/* subtítulo */}
-          <p className="hero-3 font-body text-white/70 text-lg sm:text-xl md:text-2xl leading-relaxed mb-11 max-w-xl">
+          {/* subtítulo — maior em desktop para melhor leitura */}
+          <p className="hero-3 font-body text-white/70 text-xl sm:text-2xl md:text-2xl lg:text-[1.4rem] leading-relaxed mb-11 max-w-xl">
             Tênis, Beach Tennis, Pilates, Academia e muito mais em um único
             lugar
           </p>
@@ -105,7 +124,7 @@ function Hero() {
           <div className="hero-4 flex flex-col sm:flex-row gap-4">
             <a
               href="#atividades"
-              className="inline-flex justify-center items-center bg-[#84cc16] hover:bg-[#a3e635] active:scale-95
+              className="btn-ripple inline-flex justify-center items-center bg-[#84cc16] hover:bg-[#a3e635] active:scale-95
                          text-[#0f2218] font-heading font-semibold text-base px-9 py-4 rounded-xl
                          transition-all duration-300 hover:shadow-2xl hover:shadow-[#84cc16]/30 hover:-translate-y-0.5"
             >
@@ -113,7 +132,7 @@ function Hero() {
             </a>
             <a
               href="#"
-              className="inline-flex justify-center items-center border border-white/30 hover:border-white/50
+              className="btn-ripple inline-flex justify-center items-center border border-white/30 hover:border-white/50
                          bg-white/8 hover:bg-white/15 active:scale-95 text-white font-heading font-semibold
                          text-base px-9 py-4 rounded-xl transition-all duration-300 backdrop-blur-sm hover:-translate-y-0.5"
             >
@@ -122,6 +141,16 @@ function Hero() {
           </div>
         </div>
       </div>
+
+      {/* linha de acento horizontal — elemento decorativo de corte de seção */}
+      <div
+        className="absolute bottom-0 inset-x-0 h-[3px] z-20"
+        style={{
+          background:
+            'linear-gradient(90deg, transparent 0%, #84cc16 30%, #84cc16 70%, transparent 100%)',
+        }}
+        aria-hidden="true"
+      />
 
       {/* barra de estatísticas no rodapé do hero */}
       <div className="hero-5 absolute bottom-0 mc-auto inset-x-0 border-t border-white/10 bg-black/25 backdrop-blur-sm ">
@@ -134,10 +163,12 @@ function Hero() {
         </div>
       </div>
 
-      {/* indicador de scroll */}
-      <div className="absolute bottom-24 right-6 hidden lg:flex flex-col items-center gap-3 opacity-35">
-        <div className="w-[1px] h-12 bg-white/50" />
-        <span className="text-white/70 text-[10px] font-body tracking-[5px] uppercase rotate-90 origin-center translate-x-4">
+      {/* indicador de scroll animado */}
+      <div className="absolute bottom-24 right-6 hidden lg:flex flex-col items-center gap-3 opacity-40">
+        <div className="relative w-[1px] h-14 bg-white/20 overflow-hidden rounded-full">
+          <div className="scroll-line absolute inset-x-0 top-0 h-full bg-[#84cc16] rounded-full" />
+        </div>
+        <span className="text-white/60 text-[9px] font-body tracking-[5px] uppercase rotate-90 origin-center translate-x-[18px]">
           scroll
         </span>
       </div>

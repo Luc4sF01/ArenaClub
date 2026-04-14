@@ -40,27 +40,50 @@ function FAQ() {
   const toggle = (i) => setOpenIndex(openIndex === i ? null : i)
 
   return (
-    <section ref={ref} id="faq" className="py-24 md:py-32 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section ref={ref} id="faq" className="py-24 md:py-32 bg-[#84cc16] relative overflow-hidden">
+
+      {/* palavra decorativa editorial — contraste sutil no verde */}
+      <span
+        aria-hidden="true"
+        className="absolute right-[-3%] top-1/2 -translate-y-1/2 text-[18vw] font-extrabold text-[#1a3a2a]/[0.07] leading-none select-none pointer-events-none uppercase tracking-tighter"
+      >
+        FAQ
+      </span>
+
+      {/* linhas diagonais de textura */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            'repeating-linear-gradient(-45deg, transparent, transparent 28px, rgba(26,58,42,0.04) 28px, rgba(26,58,42,0.04) 29px)',
+        }}
+      />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
 
           {/* coluna esquerda — 40% */}
           <div className="fade-in-section lg:col-span-2">
-            <span className="inline-block font-body text-[11px] font-semibold text-[#84cc16] uppercase tracking-[5px] mb-4">
-              Dúvidas frequentes
-            </span>
-            <h2 className="font-heading font-bold text-[#1a3a2a] text-3xl sm:text-4xl md:text-5xl leading-tight mb-6">
-              Tudo que você precisa saber
+            {/* linha decorativa — eyebrow — linha */}
+            <div className="flex items-center gap-3 mb-4">
+              <span aria-hidden="true" className="w-6 h-px bg-[#1a3a2a]" />
+              <span className="font-body text-[11px] font-semibold text-[#1a3a2a] uppercase tracking-[5px]">
+                Dúvidas frequentes
+              </span>
+            </div>
+            <h2 className="font-heading font-extrabold text-[#1a3a2a] text-3xl sm:text-4xl md:text-5xl leading-tight tracking-tight mb-6">
+              Tudo que você <span className="italic">precisa saber</span>
             </h2>
-            <p className="font-body text-gray-500 text-base leading-relaxed mb-9">
+            <p className="font-body text-[#1a3a2a]/70 text-lg leading-relaxed mb-9">
               Reunimos as principais dúvidas sobre o Arena Club. Não encontrou o que procura? Fale diretamente com a gente.
             </p>
             <a
               href="#"
-              className="inline-flex items-center gap-2 bg-[#1a3a2a] hover:bg-[#2a5a3f] active:scale-95
+              className="inline-flex items-center gap-2 bg-[#1a3a2a] hover:bg-[#0f2218] active:scale-95
                          text-white font-heading font-semibold text-sm px-6 py-3.5 rounded-xl
-                         transition-all duration-300 hover:shadow-lg hover:shadow-[#1a3a2a]/20"
+                         transition-all duration-300 hover:shadow-xl hover:shadow-[#1a3a2a]/30"
             >
               <MessageCircle size={17} strokeWidth={2} />
               Falar pelo WhatsApp
@@ -69,7 +92,7 @@ function FAQ() {
 
           {/* coluna direita — 60% com accordions */}
           <div className="fade-in-section delay-200 lg:col-span-3">
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y divide-[#1a3a2a]/15">
               {faqs.map((item, i) => (
                 <FAQItem
                   key={i}
@@ -95,20 +118,20 @@ function FAQItem({ question, answer, isOpen, onToggle }) {
         className="flex items-center justify-between w-full text-left gap-4 group"
         aria-expanded={isOpen}
       >
-        <span className="font-heading font-semibold text-[#1a3a2a] group-hover:text-[#2a5a3f] text-base leading-snug transition-colors duration-200">
+        <span className="font-heading font-semibold text-[#1a3a2a] group-hover:text-[#0f2218] text-base leading-snug transition-colors duration-200">
           {question}
         </span>
         <ChevronDown
           size={18}
           strokeWidth={2}
           className={`flex-shrink-0 transition-all duration-300 ${
-            isOpen ? 'rotate-180 text-[#84cc16]' : 'text-gray-400'
+            isOpen ? 'rotate-180 text-[#1a3a2a]' : 'text-[#1a3a2a]/40'
           }`}
         />
       </button>
 
       <div className={`faq-body ${isOpen ? 'open' : ''}`}>
-        <p className="font-body text-gray-500 text-sm leading-relaxed pt-3 pr-8">
+        <p className="font-body text-[#1a3a2a]/65 text-sm leading-relaxed pt-3 pr-8">
           {answer}
         </p>
       </div>

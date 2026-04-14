@@ -64,13 +64,16 @@ function Contact() {
 
           {/* coluna esquerda — informações */}
           <div className="fade-in-section">
-            <span className="inline-block font-body text-[11px] font-semibold text-[#84cc16] uppercase tracking-[5px] mb-4">
-              Entre em contato
-            </span>
-            <h2 className="font-heading font-bold text-white text-3xl sm:text-4xl md:text-5xl leading-tight mb-6">
-              Pronto para fazer parte do clube?
+            <div className="flex items-center gap-3 mb-4">
+              <span aria-hidden="true" className="w-6 h-px bg-[#84cc16]" />
+              <span className="font-body text-[11px] font-semibold text-[#84cc16] uppercase tracking-[5px]">
+                Entre em contato
+              </span>
+            </div>
+            <h2 className="font-heading font-extrabold text-white text-3xl sm:text-4xl md:text-5xl leading-tight tracking-tight mb-6">
+              Pronto para fazer parte <span className="text-[#84cc16] italic">do clube?</span>
             </h2>
-            <p className="font-body text-white/60 text-base leading-relaxed mb-10">
+            <p className="font-body text-white/60 text-lg leading-relaxed mb-10">
               Preencha o formulário e seja um dos primeiros a saber quando abrirmos as portas do Arena Club.
             </p>
             <div className="flex flex-col gap-4">

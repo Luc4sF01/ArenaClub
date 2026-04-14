@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import {
-  Check, ArrowRight,
+  Check, ArrowRight, Share2,
   CircleDot, Waves, Wind, Zap,
   PersonStanding, Dumbbell, HandHeart,
 } from 'lucide-react'
@@ -109,9 +109,17 @@ function calculateResult(answers) {
 function Quiz() {
   const ref = useSectionReveal()
 
-  const [step,     setStep]     = useState(0)  // 0–3 = perguntas, 4 = resultado
+  // localStorage: inicializa o estado com resultado salvo (se houver)
+  const [step, setStep] = useState(() => {
+    try { return localStorage.getItem('arena-quiz-answers') ? 4 : 0 } catch { return 0 }
+  })
   const [selected, setSelected] = useState(null)
-  const [answers,  setAnswers]  = useState([])
+  const [answers,  setAnswers]  = useState(() => {
+    try {
+      const saved = localStorage.getItem('arena-quiz-answers')
+      return saved ? JSON.parse(saved) : []
+    } catch { return [] }
+  })
 
   const current = QUESTIONS[step]
 
@@ -124,6 +132,8 @@ function Quiz() {
     } else {
       setAnswers(next)
       setStep(4)
+      // persiste resultado na Web Storage API para a próxima visita
+      try { localStorage.setItem('arena-quiz-answers', JSON.stringify(next)) } catch {}
     }
   }
 
@@ -131,22 +141,37 @@ function Quiz() {
     setStep(0)
     setSelected(null)
     setAnswers([])
+    try { localStorage.removeItem('arena-quiz-answers') } catch {}
   }
 
   const result = step === 4 ? calculateResult(answers) : null
+
+  // Web Share API — compartilha o resultado se o browser suportar
+  const handleShare = () => {
+    if (!result || typeof navigator.share !== 'function') return
+    navigator.share({
+      title: 'Arena Club — Quiz de modalidades',
+      text: `Minha modalidade ideal no Arena Club é ${result.name}! Descubra a sua:`,
+      url: window.location.href,
+    }).catch(() => {})
+  }
 
   return (
     <section ref={ref} id="quiz" className="py-24 md:py-32 bg-gradient-to-b from-[#f8fafc] to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div className="fade-in-section text-center mb-12">
-          <span className="inline-block font-body text-[11px] font-semibold text-[#84cc16] uppercase tracking-[5px] mb-4">
-            Descubra a sua
-          </span>
-          <h2 className="font-heading font-bold text-[#1a3a2a] text-3xl sm:text-4xl md:text-5xl">
-            Qual modalidade combina com você?
+          <div className="inline-flex items-center gap-3 mb-4">
+            <span aria-hidden="true" className="w-8 h-px bg-[#84cc16]" />
+            <span className="font-body text-[11px] font-semibold text-[#84cc16] uppercase tracking-[5px]">
+              Descubra a sua
+            </span>
+            <span aria-hidden="true" className="w-8 h-px bg-[#84cc16]" />
+          </div>
+          <h2 className="font-heading font-extrabold text-[#1a3a2a] text-3xl sm:text-5xl md:text-6xl tracking-tight">
+            Qual modalidade <span className="text-[#84cc16] italic">combina com você?</span>
           </h2>
-          <p className="mt-4 font-body text-gray-500 text-base sm:text-lg max-w-xl mx-auto">
+          <p className="mt-4 font-body text-gray-500 text-lg sm:text-xl max-w-xl mx-auto">
             Responda 4 perguntas rápidas e descubra o esporte ideal para o seu perfil.
           </p>
         </div>
@@ -238,6 +263,18 @@ function Quiz() {
                         Refazer o quiz
                       </button>
                     </div>
+
+                    {/* Web Share API — botão só aparece se o browser suportar */}
+                    {typeof navigator.share === 'function' && (
+                      <button
+                        onClick={handleShare}
+                        className="mt-2 inline-flex items-center gap-2 text-sm font-body text-gray-400
+                                   hover:text-[#84cc16] transition-colors duration-200 mx-auto"
+                      >
+                        <Share2 size={14} strokeWidth={2} />
+                        Compartilhar resultado
+                      </button>
+                    )}
                   </>
                 )
               })()}
