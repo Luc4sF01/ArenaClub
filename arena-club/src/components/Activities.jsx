@@ -11,7 +11,7 @@ const activities = [
   { icon: Zap,            name: 'Pickleball',   desc: 'O esporte que mais cresce no mundo' },
   { icon: PersonStanding, name: 'Pilates',      desc: 'Aulas com equipamentos modernos e instrutores especializados' },
   { icon: Dumbbell,       name: 'Academia',     desc: 'Musculação completa com equipamentos de última geração' },
-  { icon: HandHeart,      name: 'Massagem',     desc: 'Sessões sob consulta e disponibilidade (serviço avulso)' },
+  { icon: HandHeart,      name: 'Massagem',     desc: 'Sessões sob agendamento e disponibilidade', avulso: true },
 ]
 
 // Calcula a inclinação 3D com base na posição do mouse dentro do card
@@ -77,16 +77,19 @@ function Activities() {
         <div className="fade-in-section delay-200 flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-no-bar pb-4 sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-5">
           {activities.map((item, i) => {
             const Icon = item.icon
+            const isAvulso = !!item.avulso
             return (
               <div
                 key={item.name}
                 onMouseMove={handleTilt}
                 onMouseLeave={handleTiltReset}
-                className="activity-card group relative flex-shrink-0 w-64 snap-start sm:w-auto
-                           bg-white border border-gray-100 rounded-2xl p-6
-                           flex flex-col gap-4 overflow-hidden
-                           hover:shadow-xl hover:shadow-[#84cc16]/10 hover:border-[#84cc16]/25
-                           cursor-default will-change-transform"
+                className={`activity-card group relative flex-shrink-0 w-64 snap-start sm:w-auto
+                            rounded-2xl p-6 flex flex-col gap-4 overflow-hidden
+                            cursor-default will-change-transform transition-shadow duration-300
+                            ${isAvulso
+                              ? 'bg-amber-50/60 border border-dashed border-amber-200 hover:shadow-xl hover:shadow-amber-400/15 hover:border-amber-300'
+                              : 'bg-white border border-gray-100 hover:shadow-xl hover:shadow-[#84cc16]/10 hover:border-[#84cc16]/25'
+                            }`}
                 style={{ transitionDelay: `${i * 40}ms` }}
               >
                 {/* número sequencial como watermark editorial */}
@@ -97,11 +100,19 @@ function Activities() {
                   {String(i + 1).padStart(2, '0')}
                 </span>
 
-                <div className="p-3 bg-[#1a3a2a]/5 rounded-xl w-fit group-hover:bg-[#84cc16]/12 transition-colors duration-300">
-                  <Icon size={30} className="text-[#84cc16]" strokeWidth={1.75} />
+                <div className={`p-3 rounded-xl w-fit transition-colors duration-300
+                                 ${isAvulso
+                                   ? 'bg-amber-100 group-hover:bg-amber-200/70'
+                                   : 'bg-[#1a3a2a]/5 group-hover:bg-[#84cc16]/12'
+                                 }`}>
+                  <Icon
+                    size={30}
+                    className={isAvulso ? 'text-amber-500' : 'text-[#84cc16]'}
+                    strokeWidth={1.75}
+                  />
                 </div>
 
-                <div>
+                <div className="flex-1">
                   <h3 className="font-heading font-semibold text-[#1a3a2a] text-lg mb-1.5">
                     {item.name}
                   </h3>
@@ -110,8 +121,21 @@ function Activities() {
                   </p>
                 </div>
 
+                {/* badge de serviço avulso */}
+                {isAvulso && (
+                  <span className="inline-flex items-center gap-1.5 font-body text-[11px] font-semibold
+                                   text-amber-600 bg-amber-100 border border-amber-200
+                                   px-2.5 py-1 rounded-full w-fit">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0" aria-hidden="true" />
+                    Serviço avulso
+                  </span>
+                )}
+
                 {/* linha decorativa que expande no hover */}
-                <div className="activity-line" />
+                <div
+                  className="activity-line"
+                  style={isAvulso ? { background: '#f59e0b' } : {}}
+                />
               </div>
             )
           })}
