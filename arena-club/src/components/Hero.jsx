@@ -154,7 +154,7 @@ function Hero() {
 
       {/* barra de estatísticas no rodapé do hero */}
       <div className="hero-5 absolute bottom-0 mc-auto inset-x-0 border-t border-white/10 bg-black/25 backdrop-blur-sm ">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 py-5 flex items-center flex-wrap gap-x-10 gap-y-3 lg:ml-[590px]">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 py-5 flex items-center flex-wrap gap-x-10 gap-y-3 ">
           <StatChip number="500+" label="Sócios esperados" />
           <div className="h-7 w-px bg-white/20 hidden sm:block" />
           <StatChip number="7" label="Modalidades" />
