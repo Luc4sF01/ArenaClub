@@ -113,10 +113,10 @@ function Header() {
       {/* drawer mobile */}
       <div
         className={`md:hidden overflow-hidden transition-all duration-300 ${
-          open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          open ? 'max-h-[480px] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <nav className="bg-[#1a3a2a] border-t border-white/10 px-5 py-4 flex flex-col gap-1">
+        <nav className="bg-[#1a3a2a] border-t border-white/10 px-5 pt-4 pb-6 flex flex-col gap-1">
           {links.map((l) => (
             <a
               key={l.href}
