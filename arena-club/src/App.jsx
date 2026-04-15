@@ -1,4 +1,5 @@
-import { useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
+import { Zap } from 'lucide-react'
 import Header       from './components/Header'
 import Hero         from './components/Hero'
 import Activities   from './components/Activities'
@@ -9,6 +10,7 @@ import FAQ          from './components/FAQ'
 import Contact      from './components/Contact'
 import Footer       from './components/Footer'
 
+/* ─── Faixa de esportes com scroll infinito ─── */
 const BAND_ITEMS = [
   'Tênis', 'Beach Tennis', 'Futevôlei', 'Pickleball',
   'Pilates', 'Academia', 'Massagem',
@@ -33,55 +35,74 @@ function MarqueeBand() {
   )
 }
 
-function CustomCursor() {
-  const dotRef  = useRef(null)
-  const ringRef = useRef(null)
-  const mouse   = useRef({ x: -200, y: -200 })
-  const ringPos = useRef({ x: -200, y: -200 })
-  const rafId   = useRef(null)
+/*
+  ─── Tela de introdução ───
+  Cobre a página inteira até o site carregar.
+  Estado: 'visible' → 'hiding' (fade out) → 'gone' (desmonta o DOM).
+  Zero libraries — só useState + useEffect + CSS transition.
+*/
+function IntroScreen() {
+  const [phase, setPhase] = useState('visible')
 
   useEffect(() => {
-    const onMove = (e) => { mouse.current = { x: e.clientX, y: e.clientY } }
-    document.addEventListener('mousemove', onMove)
-
-    const tick = () => {
-      const { x, y } = mouse.current
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${x}px, ${y}px)`
-      }
-      ringPos.current.x += (x - ringPos.current.x) * 0.12
-      ringPos.current.y += (y - ringPos.current.y) * 0.12
-      if (ringRef.current) {
-        ringRef.current.style.transform =
-          `translate(${ringPos.current.x}px, ${ringPos.current.y}px)`
-      }
-      rafId.current = requestAnimationFrame(tick)
-    }
-    rafId.current = requestAnimationFrame(tick)
-
-    return () => {
-      document.removeEventListener('mousemove', onMove)
-      cancelAnimationFrame(rafId.current)
-    }
+    // aguarda a barra de progresso (~2.2s) e então inicia o fade de saída
+    const t1 = setTimeout(() => setPhase('hiding'), 2300)
+    // após o fade (700ms) remove o elemento do DOM completamente
+    const t2 = setTimeout(() => setPhase('gone'),   3000)
+    return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [])
 
+  if (phase === 'gone') return null
+
   return (
-    <>
-      <div ref={dotRef} aria-hidden="true"
-        className="fixed top-0 left-0 pointer-events-none z-[9999] will-change-transform hidden lg:block">
-        <span className="block w-[7px] h-[7px] rounded-full bg-[#84cc16] -translate-x-1/2 -translate-y-1/2" />
+    <div
+      className={`fixed inset-0 z-[9999] bg-[#0f2218] flex flex-col items-center justify-center
+                  transition-all duration-700 ease-in-out
+                  ${phase === 'hiding' ? 'opacity-0 scale-[1.04]' : 'opacity-100 scale-100'}`}
+    >
+      {/* grade decorativa — mesma do Hero */}
+      <div
+        className="absolute inset-0 opacity-[0.04] pointer-events-none"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(132,204,22,1) 1px, transparent 1px), linear-gradient(90deg, rgba(132,204,22,1) 1px, transparent 1px)',
+          backgroundSize: '64px 64px',
+        }}
+      />
+
+      <div className="relative flex flex-col items-center gap-3">
+        {/* ícone */}
+        <Zap
+          size={54}
+          className="text-[#84cc16] mb-1"
+          strokeWidth={1.5}
+          style={{ filter: 'drop-shadow(0 0 24px rgba(132,204,22,0.5))' }}
+        />
+
+        {/* logotipo */}
+        <p className="font-heading font-extrabold text-white tracking-wide"
+           style={{ fontSize: 'clamp(32px, 5vw, 52px)' }}>
+          Arena <span className="text-[#84cc16]">Club</span>
+        </p>
+
+        {/* tagline */}
+        <p className="font-body text-white/35 text-xs tracking-[5px] uppercase mt-1">
+          Inauguração 2026
+        </p>
+
+        {/* barra de progresso */}
+        <div className="w-44 h-[2px] bg-white/10 rounded-full overflow-hidden mt-8">
+          <div className="intro-progress h-full bg-[#84cc16] rounded-full" />
+        </div>
       </div>
-      <div ref={ringRef} aria-hidden="true"
-        className="fixed top-0 left-0 pointer-events-none z-[9998] will-change-transform hidden lg:block">
-        <span className="block w-[30px] h-[30px] rounded-full border border-[#84cc16]/55 -translate-x-1/2 -translate-y-1/2" />
-      </div>
-    </>
+    </div>
   )
 }
 
 function App() {
   return (
     <>
+      <IntroScreen />
       <Header />
       <main>
         <Hero />
@@ -94,7 +115,6 @@ function App() {
         <Contact />
       </main>
       <Footer />
-      <CustomCursor />
     </>
   )
 }

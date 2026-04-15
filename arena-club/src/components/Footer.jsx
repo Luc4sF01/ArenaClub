@@ -62,7 +62,7 @@ function Footer() {
           {/* redes sociais */}
           <div>
             <h3 className="font-heading font-semibold text-white/70 text-[11px] uppercase tracking-[4px] mb-5">
-              Siga-nos
+              Contate-nos
             </h3>
             <div className="flex items-center gap-3">
               {socialLinks.map(({ icon: Icon, href, label }) => (
@@ -85,7 +85,7 @@ function Footer() {
           <p className="font-body text-white/30 text-sm">
             &copy; 2026 Arena Club. Todos os direitos reservados.
           </p>
-          <p className="font-body text-white/18 text-xs">
+          <p className="font-body text-white/30 text-xs">
             Arena Club é uma marca registrada. Qualquer uso não autorizado do
             nome ou logotipo é estritamente proibido.
           </p>

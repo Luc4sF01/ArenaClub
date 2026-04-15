@@ -8,6 +8,9 @@
 
 html { scroll-behavior: smooth; }
 
+/* offset para o header fixo — sem isso a seção fica escondida atrás do nav */
+section[id] { scroll-margin-top: 78px; }
+
 body {
   font-family: 'Inter', sans-serif;
   color: #111827;
@@ -136,9 +139,14 @@ body {
 .marquee-track { animation: marquee 32s linear infinite; }
 .marquee-wrap:hover .marquee-track { animation-play-state: paused; }
 
-/* ─── Custom cursor — esconde o padrão do SO em dispositivos com mouse ─── */
-@media (hover: hover) and (pointer: fine) {
-  * { cursor: none !important; }
+/* ─── Intro screen: barra de progresso ─── */
+@keyframes introProgress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+.intro-progress {
+  transform-origin: left;
+  animation: introProgress 2.1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* ─── Respeita preferência de acessibilidade do sistema (WCAG 2.1 SC 2.3.3) ─── */
